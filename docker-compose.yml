@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - MONGO_URI=${MONGO_URI:-mongodb://mongodb:27017/gis_equipment}
+      - JWT_SECRET=${JWT_SECRET:-please-change-this-secret}
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - GIS_API_URL=http://gis-engine:8000
+    depends_on:
+      - mongodb
+      - gis-engine
+    networks:
+      - gis-network
+
+  gis-engine:
+    build: ./gis-engine
+    ports:
+      - "8000:8000"
+    networks:
+      - gis-network
+
+  mongodb:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - gis-network
+
+volumes:
+  mongodb_data:
+
+networks:
+  gis-network:
+    driver: bridge
