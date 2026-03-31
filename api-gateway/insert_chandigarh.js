@@ -6,6 +6,7 @@ const MONGO_URI = 'mongodb://localhost:27017/gis_equipment';
 async function run() {
   await mongoose.connect(MONGO_URI);
   await Equipment.deleteMany({});
+  await mongoose.connection.collection('requests').deleteMany({});
   const tractor1 = new Equipment({
     name: 'Tractor Alpha',
     type: 'Tractor',

@@ -1,0 +1,89 @@
+﻿
+Running 1 test using 1 worker
+├ù├ùF
+
+  1) [chromium] ΓÇ║ tests\logistics-loop.spec.js:3:1 ΓÇ║ End-to-End Logistics Loop ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('tr').filter({ hasText: '9999999999' }).first().locator('span:has-text("Approved")')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for locator('tr').filter({ hasText: '9999999999' }).first().locator('span:has-text("Approved")')[22m
+
+
+      55 |
+      56 |   // Wait for status to change to Approved
+    > 57 |   await expect(requestRow.locator('span:has-text("Approved")')).toBeVisible({ timeout: 10000 });
+         |                                                                 ^
+      58 |
+      59 |   // 4. Map Flow
+      60 |   // The tab is labeled "Dashboard"
+        at C:\Users\jeeth\Downloads\Gis project final folder\frontend\tests\logistics-loop.spec.js:57:65
+
+    Error Context: test-results\logistics-loop-End-to-End-Logistics-Loop-chromium\error-context.md
+
+    Retry #1 ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('tr').filter({ hasText: '9999999999' }).first().locator('span:has-text("Approved")')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for locator('tr').filter({ hasText: '9999999999' }).first().locator('span:has-text("Approved")')[22m
+
+
+      55 |
+      56 |   // Wait for status to change to Approved
+    > 57 |   await expect(requestRow.locator('span:has-text("Approved")')).toBeVisible({ timeout: 10000 });
+         |                                                                 ^
+      58 |
+      59 |   // 4. Map Flow
+      60 |   // The tab is labeled "Dashboard"
+        at C:\Users\jeeth\Downloads\Gis project final folder\frontend\tests\logistics-loop.spec.js:57:65
+
+    Error Context: test-results\logistics-loop-End-to-End-Logistics-Loop-chromium-retry1\error-context.md
+
+    attachment #2: trace (application/zip) ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+    test-results\logistics-loop-End-to-End-Logistics-Loop-chromium-retry1\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\logistics-loop-End-to-End-Logistics-Loop-chromium-retry1\trace.zip
+
+    ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Retry #2 ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('tr').filter({ hasText: '9999999999' }).first().locator('span:has-text("Approved")')
+    Expected: visible
+    Timeout: 10000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 10000ms[22m
+    [2m  - waiting for locator('tr').filter({ hasText: '9999999999' }).first().locator('span:has-text("Approved")')[22m
+
+
+      55 |
+      56 |   // Wait for status to change to Approved
+    > 57 |   await expect(requestRow.locator('span:has-text("Approved")')).toBeVisible({ timeout: 10000 });
+         |                                                                 ^
+      58 |
+      59 |   // 4. Map Flow
+      60 |   // The tab is labeled "Dashboard"
+        at C:\Users\jeeth\Downloads\Gis project final folder\frontend\tests\logistics-loop.spec.js:57:65
+
+    Error Context: test-results\logistics-loop-End-to-End-Logistics-Loop-chromium-retry2\error-context.md
+
+  1 failed
+    [chromium] ΓÇ║ tests\logistics-loop.spec.js:3:1 ΓÇ║ End-to-End Logistics Loop ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ

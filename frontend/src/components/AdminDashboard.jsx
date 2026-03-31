@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
-import L from 'leaflet';
+import FleetManager from './FleetManager';
+import RequestManager from './RequestManager';
+import AdminMap from './AdminMap';
 
 // Custom icons using generic marker URLs to avoid local asset issues
 const redIcon = new L.Icon({
@@ -23,6 +24,7 @@ const greenIcon = new L.Icon({
 
 export default function AdminDashboard() {
   const [activeRoutes, setActiveRoutes] = useState([]);
+  const [activeTab, setActiveTab] = useState('dashboard');
 
   useEffect(() => {
     const fetchRoutes = async () => {
@@ -58,10 +60,30 @@ export default function AdminDashboard() {
               <span className="font-bold text-xl tracking-wide">AgriConnect Admin</span>
             </div>
             <nav className="hidden md:flex space-x-8">
-              <a href="#" className="border-b-2 border-green-500 text-white px-1 pt-1 text-sm font-medium">Dashboard</a>
-              <a href="#" className="border-transparent text-gray-300 hover:text-white hover:border-gray-300 border-b-2 px-1 pt-1 text-sm font-medium transition-colors">Fleets</a>
-              <a href="#" className="border-transparent text-gray-300 hover:text-white hover:border-gray-300 border-b-2 px-1 pt-1 text-sm font-medium transition-colors">Requests</a>
-              <a href="#" className="border-transparent text-gray-300 hover:text-white hover:border-gray-300 border-b-2 px-1 pt-1 text-sm font-medium transition-colors">Settings</a>
+              <button 
+                onClick={() => setActiveTab('dashboard')} 
+                className={`px-1 pt-1 text-sm font-medium transition-colors border-b-2 ${activeTab === 'dashboard' ? 'border-green-500 text-white' : 'border-transparent text-gray-300 hover:text-white hover:border-gray-300'}`}
+              >
+                Dashboard
+              </button>
+              <button 
+                onClick={() => setActiveTab('fleets')} 
+                className={`px-1 pt-1 text-sm font-medium transition-colors border-b-2 ${activeTab === 'fleets' ? 'border-green-500 text-white' : 'border-transparent text-gray-300 hover:text-white hover:border-gray-300'}`}
+              >
+                Fleets
+              </button>
+              <button 
+                onClick={() => setActiveTab('requests')} 
+                className={`px-1 pt-1 text-sm font-medium transition-colors border-b-2 ${activeTab === 'requests' ? 'border-green-500 text-white' : 'border-transparent text-gray-300 hover:text-white hover:border-gray-300'}`}
+              >
+                Requests
+              </button>
+              <button 
+                onClick={() => setActiveTab('settings')} 
+                className={`px-1 pt-1 text-sm font-medium transition-colors border-b-2 ${activeTab === 'settings' ? 'border-green-500 text-white' : 'border-transparent text-gray-300 hover:text-white hover:border-gray-300'}`}
+              >
+                Settings
+              </button>
             </nav>
             <div className="flex items-center gap-4">
               <div className="w-8 h-8 rounded-full bg-slate-700 border-2 border-slate-600"></div>
@@ -73,8 +95,10 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6">
         
-        {/* KPI Status Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {activeTab === 'dashboard' && (
+          <>
+            {/* KPI Status Row */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow">
             <div>
               <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Active Requests</p>
@@ -106,65 +130,21 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Massive Map Section */}
-        <div className="flex-1 bg-white p-4 rounded-3xl shadow-lg border border-gray-200 flex flex-col relative min-h-[600px]">
-          <div className="flex justify-between items-center mb-4 px-2">
-            <h2 className="text-xl font-bold text-gray-800">Live Dispatch Routing</h2>
-            <div className="flex gap-2">
-              <span className="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full border border-green-200">System Online</span>
-            </div>
+        <AdminMap />
+          </>
+        )}
+
+        {activeTab === 'fleets' && <FleetManager />}
+        {activeTab === 'requests' && <RequestManager />}
+        
+        {activeTab === 'settings' && (
+          <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-100 flex items-center justify-center text-gray-500">
+            <p className="text-xl font-medium">Content for {activeTab} coming soon.</p>
           </div>
-          
-          <div className="flex-1 rounded-2xl overflow-hidden border border-gray-200 relative shadow-inner">
-            <MapContainer center={[30.7390, 76.7794]} zoom={13} className="h-full w-full absolute inset-0 z-0">
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; OpenStreetMap contributors'
-              />
-              
-              {activeRoutes.map((route) => (
-                <React.Fragment key={route._id}>
-                  <Marker position={route.farmLocation} icon={redIcon}>
-                    <Popup>
-                      <strong>Farm Request</strong><br/>
-                      Status: Allocated
-                    </Popup>
-                  </Marker>
-
-                  <Marker position={route.dispatchLocation} icon={greenIcon}>
-                    <Popup>
-                      <strong>{route.equipmentName}</strong><br/>
-                      Status: Dispatched
-                    </Popup>
-                  </Marker>
-
-                  <Polyline positions={[route.dispatchLocation, route.farmLocation]} pathOptions={polylineOptions} />
-                </React.Fragment>
-              ))}
-            </MapContainer>
-
-            {/* Floating Legend Overlay */}
-            <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-md px-6 py-3 rounded-full shadow-2xl border border-gray-200 flex items-center gap-6 z-[1000] text-sm font-semibold text-gray-700">
-              <div className="flex items-center gap-2">
-                <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png" alt="red" className="h-5" />
-                <span>Farm Need</span>
-              </div>
-              <div className="w-px h-6 bg-gray-300"></div>
-              <div className="flex items-center gap-2">
-                <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png" alt="green" className="h-5" />
-                <span>Dispatched</span>
-              </div>
-              <div className="w-px h-6 bg-gray-300"></div>
-              <div className="flex items-center gap-2">
-                <div className="w-6 border-t-4 border-dashed border-blue-500 rounded-full"></div>
-                <span>Route</span>
-              </div>
-            </div>
-
-          </div>
-        </div>
+        )}
 
       </main>
     </div>
   );
 }
+

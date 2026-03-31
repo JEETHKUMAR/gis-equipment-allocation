@@ -16,7 +16,7 @@ const requestSchema = new mongoose.Schema({
       required: true
     }
   },
-  status: { type: String, enum: ['pending', 'allocated', 'completed'], default: 'pending' },
+  status: { type: String, enum: ['pending', 'allocated', 'completed', 'approved', 'rejected'], default: 'pending' },
   allocated_equipment: { type: mongoose.Schema.Types.ObjectId, ref: 'Equipment', default: null }
 }, { timestamps: true });
 

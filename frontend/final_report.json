@@ -1,0 +1,269 @@
+Terminate batch job (Y/N)? {
+  "config": {
+    "configFile": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\playwright.config.ts",
+    "rootDir": "C:/Users/jeeth/Downloads/Gis project final folder/frontend/tests",
+    "forbidOnly": true,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/jeeth/Downloads/Gis project final folder/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/jeeth/Downloads/Gis project final folder/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/jeeth/Downloads/Gis project final folder/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/jeeth/Downloads/Gis project final folder/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/jeeth/Downloads/Gis project final folder/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "C:/Users/jeeth/Downloads/Gis project final folder/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "logistics-loop.spec.js",
+      "file": "logistics-loop.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "End-to-End Logistics Loop",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 16964,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('span:has-text(\"Approved\")').first()\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('span:has-text(\"Approved\")').first()\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('span:has-text(\"Approved\")').first()\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('span:has-text(\"Approved\")').first()\u001b[22m\n\n    at C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js:69:67",
+                    "location": {
+                      "file": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js",
+                      "column": 67,
+                      "line": 69
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 67 |\u001b[39m\n \u001b[90m 68 |\u001b[39m   \u001b[90m// Wait for status to change to Approved globally, avoiding stale references\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 69 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'span:has-text(\"Approved\")'\u001b[39m)\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 70 |\u001b[39m\n \u001b[90m 71 |\u001b[39m   \u001b[90m// 4. Map Flow\u001b[39m\n \u001b[90m 72 |\u001b[39m   \u001b[90m// The tab is labeled \"Dashboard\"\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js",
+                        "column": 67,
+                        "line": 69
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('span:has-text(\"Approved\")').first()\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('span:has-text(\"Approved\")').first()\u001b[22m\n\n\n  67 |\n  68 |   // Wait for status to change to Approved globally, avoiding stale references\n> 69 |   await expect(page.locator('span:has-text(\"Approved\")').first()).toBeVisible({ timeout: 15000 });\n     |                                                                   ^\n  70 |\n  71 |   // 4. Map Flow\n  72 |   // The tab is labeled \"Dashboard\"\n    at C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js:69:67"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "buffer": ""
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-03-27T05:38:46.662Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\test-results\\logistics-loop-End-to-End-Logistics-Loop-chromium\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js",
+                    "column": 67,
+                    "line": 69
+                  }
+                },
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 17166,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('span:has-text(\"Approved\")').first()\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('span:has-text(\"Approved\")').first()\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('span:has-text(\"Approved\")').first()\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('span:has-text(\"Approved\")').first()\u001b[22m\n\n    at C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js:69:67",
+                    "location": {
+                      "file": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js",
+                      "column": 67,
+                      "line": 69
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 67 |\u001b[39m\n \u001b[90m 68 |\u001b[39m   \u001b[90m// Wait for status to change to Approved globally, avoiding stale references\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 69 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'span:has-text(\"Approved\")'\u001b[39m)\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 70 |\u001b[39m\n \u001b[90m 71 |\u001b[39m   \u001b[90m// 4. Map Flow\u001b[39m\n \u001b[90m 72 |\u001b[39m   \u001b[90m// The tab is labeled \"Dashboard\"\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js",
+                        "column": 67,
+                        "line": 69
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('span:has-text(\"Approved\")').first()\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('span:has-text(\"Approved\")').first()\u001b[22m\n\n\n  67 |\n  68 |   // Wait for status to change to Approved globally, avoiding stale references\n> 69 |   await expect(page.locator('span:has-text(\"Approved\")').first()).toBeVisible({ timeout: 15000 });\n     |                                                                   ^\n  70 |\n  71 |   // 4. Map Flow\n  72 |   // The tab is labeled \"Dashboard\"\n    at C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js:69:67"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "buffer": ""
+                    }
+                  ],
+                  "retry": 1,
+                  "startTime": "2026-03-27T05:39:05.474Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\test-results\\logistics-loop-End-to-End-Logistics-Loop-chromium-retry1\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\test-results\\logistics-loop-End-to-End-Logistics-Loop-chromium-retry1\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js",
+                    "column": 67,
+                    "line": 69
+                  }
+                },
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "interrupted",
+                  "duration": 15010,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('span:has-text(\"Approved\")').first()\nExpected: visible\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('span:has-text(\"Approved\")').first()\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('span:has-text(\"Approved\")').first()\nExpected: visible\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('span:has-text(\"Approved\")').first()\u001b[22m\n\n    at C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js:69:67",
+                    "location": {
+                      "file": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js",
+                      "column": 67,
+                      "line": 69
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 67 |\u001b[39m\n \u001b[90m 68 |\u001b[39m   \u001b[90m// Wait for status to change to Approved globally, avoiding stale references\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 69 |\u001b[39m   \u001b[36mawait\u001b[39m expect(page\u001b[33m.\u001b[39mlocator(\u001b[32m'span:has-text(\"Approved\")'\u001b[39m)\u001b[33m.\u001b[39mfirst())\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m15000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                                   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 70 |\u001b[39m\n \u001b[90m 71 |\u001b[39m   \u001b[90m// 4. Map Flow\u001b[39m\n \u001b[90m 72 |\u001b[39m   \u001b[90m// The tab is labeled \"Dashboard\"\u001b[39m\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js",
+                        "column": 67,
+                        "line": 69
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('span:has-text(\"Approved\")').first()\nExpected: visible\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for locator('span:has-text(\"Approved\")').first()\u001b[22m\n\n\n  67 |\n  68 |   // Wait for status to change to Approved globally, avoiding stale references\n> 69 |   await expect(page.locator('span:has-text(\"Approved\")').first()).toBeVisible({ timeout: 15000 });\n     |                                                                   ^\n  70 |\n  71 |   // 4. Map Flow\n  72 |   // The tab is labeled \"Dashboard\"\n    at C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js:69:67"
+                    },
+                    {
+                      "message": "Error: browserContext.close: Test ended.\nBrowser logs:\n\n<launching> C:\\Users\\jeeth\\AppData\\Local\\ms-playwright\\chromium_headless_shell-1208\\chrome-headless-shell-win64\\chrome-headless-shell.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument,OptimizationHints --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=C:\\Users\\jeeth\\AppData\\Local\\Temp\\playwright_chromiumdev_profile-FvgWey --remote-debugging-pipe --no-startup-window\n<launched> pid=31340\n[pid=31340][err] [0327/110925.023:INFO:CONSOLE:229] \"[vite] connecting...\", source: http://localhost:3000/@vite/client (229)\n[pid=31340][err] [0327/110925.029:INFO:CONSOLE:325] \"[vite] connected.\", source: http://localhost:3000/@vite/client (325)\n[pid=31340][err] [0327/110925.057:INFO:CONSOLE:21580] \"%cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold\", source: http://localhost:3000/node_modules/.vite/deps/chunk-VRHMX22Y.js?v=a320729a (21580)"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "buffer": ""
+                    }
+                  ],
+                  "retry": 2,
+                  "startTime": "2026-03-27T05:39:24.332Z",
+                  "annotations": [],
+                  "attachments": [],
+                  "errorLocation": {
+                    "file": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js",
+                    "column": 67,
+                    "line": 69
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "825f4ee44d28dca04af8-fb2faed8ac665fabb14a",
+          "file": "logistics-loop.spec.js",
+          "line": 15,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-03-27T05:38:45.683Z",
+    "duration": 54562.100999999995,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

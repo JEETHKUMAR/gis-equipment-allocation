@@ -1,0 +1,250 @@
+Terminate batch job (Y/N)? {
+  "config": {
+    "configFile": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\playwright.config.ts",
+    "rootDir": "C:/Users/jeeth/Downloads/Gis project final folder/frontend/tests",
+    "forbidOnly": true,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Users/jeeth/Downloads/Gis project final folder/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Users/jeeth/Downloads/Gis project final folder/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/jeeth/Downloads/Gis project final folder/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Users/jeeth/Downloads/Gis project final folder/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Users/jeeth/Downloads/Gis project final folder/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 2,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "C:/Users/jeeth/Downloads/Gis project final folder/frontend/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "logistics-loop.spec.js",
+      "file": "logistics-loop.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "End-to-End Logistics Loop",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30027,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js",
+                        "column": 14,
+                        "line": 73
+                      },
+                      "message": "Error: page.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Overview\")')\u001b[22m\n\n\n  71 |   // 4. Map Flow\n  72 |   // The tab is labeled \"Overview\"\n> 73 |   await page.click('button:has-text(\"Overview\")');\n     |              ^\n  74 |   \n  75 |   // Assert Map is visible\n  76 |   await expect(page.locator('.leaflet-container')).toBeVisible();\n    at C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js:73:14"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "buffer": ""
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-03-27T06:52:14.177Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\test-results\\logistics-loop-End-to-End-Logistics-Loop-chromium\\error-context.md"
+                    }
+                  ]
+                },
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 30096,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js",
+                        "column": 14,
+                        "line": 73
+                      },
+                      "message": "Error: page.click: Test timeout of 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('button:has-text(\"Overview\")')\u001b[22m\n\n\n  71 |   // 4. Map Flow\n  72 |   // The tab is labeled \"Overview\"\n> 73 |   await page.click('button:has-text(\"Overview\")');\n     |              ^\n  74 |   \n  75 |   // Assert Map is visible\n  76 |   await expect(page.locator('.leaflet-container')).toBeVisible();\n    at C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js:73:14"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "buffer": ""
+                    }
+                  ],
+                  "retry": 1,
+                  "startTime": "2026-03-27T06:52:45.799Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\test-results\\logistics-loop-End-to-End-Logistics-Loop-chromium-retry1\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\test-results\\logistics-loop-End-to-End-Logistics-Loop-chromium-retry1\\trace.zip"
+                    }
+                  ]
+                },
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 0,
+                  "error": {
+                    "message": "Error: Command failed: node \"C:\\Users\\jeeth\\Downloads\\Gis project final folder\\api-gateway\\insert_chandigarh.js\"\n^C",
+                    "stack": "Error: Command failed: node \"C:\\Users\\jeeth\\Downloads\\Gis project final folder\\api-gateway\\insert_chandigarh.js\"\n^C\n    at C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js:12:3",
+                    "location": {
+                      "file": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js",
+                      "column": 3,
+                      "line": 12
+                    },
+                    "snippet": "\u001b[0m \u001b[90m 10 |\u001b[39m   \u001b[90m// Seed the database to ensure a Harvester is always available for the test run\u001b[39m\n \u001b[90m 11 |\u001b[39m   \u001b[36mconst\u001b[39m scriptPath \u001b[33m=\u001b[39m path\u001b[33m.\u001b[39mresolve(__dirname\u001b[33m,\u001b[39m \u001b[32m'../../api-gateway/insert_chandigarh.js'\u001b[39m)\u001b[33m;\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 12 |\u001b[39m   execSync(\u001b[32m`node \"${scriptPath}\"`\u001b[39m)\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m   \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 13 |\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m 14 |\u001b[39m\n \u001b[90m 15 |\u001b[39m test(\u001b[32m'End-to-End Logistics Loop'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m ({ page }) \u001b[33m=>\u001b[39m {\u001b[0m"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js",
+                        "column": 3,
+                        "line": 12
+                      },
+                      "message": "Error: Command failed: node \"C:\\Users\\jeeth\\Downloads\\Gis project final folder\\api-gateway\\insert_chandigarh.js\"\n^C\n\n  10 |   // Seed the database to ensure a Harvester is always available for the test run\n  11 |   const scriptPath = path.resolve(__dirname, '../../api-gateway/insert_chandigarh.js');\n> 12 |   execSync(`node \"${scriptPath}\"`);\n     |   ^\n  13 | });\n  14 |\n  15 | test('End-to-End Logistics Loop', async ({ page }) => {\n    at C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js:12:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "buffer": "XkM="
+                    }
+                  ],
+                  "retry": 2,
+                  "startTime": "2026-03-27T06:53:17.552Z",
+                  "annotations": [],
+                  "attachments": [],
+                  "errorLocation": {
+                    "file": "C:\\Users\\jeeth\\Downloads\\Gis project final folder\\frontend\\tests\\logistics-loop.spec.js",
+                    "column": 3,
+                    "line": 12
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "825f4ee44d28dca04af8-fb2faed8ac665fabb14a",
+          "file": "logistics-loop.spec.js",
+          "line": 15,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-03-27T06:52:13.199Z",
+    "duration": 64602.692,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}
