@@ -53,7 +53,7 @@ test('End-to-End Logistics Loop', async ({ page }) => {
   await expect(page.locator('text=AgriConnect Admin')).toBeVisible();
 
   // 3. The Brain Flow - Requests
-  await page.click('button:has-text("Requests")');
+  await page.locator('text="Requests"').first().click({ force: true });
   
   // Find the request row we just made (Harvester) and Approve it
   const requestRow = page.locator('tr').filter({ hasText: '9999999999' }).first();
@@ -69,8 +69,8 @@ test('End-to-End Logistics Loop', async ({ page }) => {
   await expect(page.locator('span:has-text("Approved")').first()).toBeVisible({ timeout: 15000 });
 
   // 4. Map Flow
-  // The tab is labeled "Overview"
-  await page.locator('text=Overview').first().click({ force: true });
+  // The tab is labeled "Dashboard"
+  await page.locator('text="Dashboard"').click({ force: true });
   
   // Assert Map is visible
   await expect(page.locator('.leaflet-container')).toBeVisible();
@@ -80,4 +80,24 @@ test('End-to-End Logistics Loop', async ({ page }) => {
   
   const pathCount = await page.locator('path.leaflet-interactive').count();
   expect(pathCount).toBeGreaterThan(0);
+
+  // 5. Complete Job Flow
+  // The tab is labeled "Requests" again
+  await page.locator('text="Requests"').first().click({ force: true });
+
+  // Get the row again to avoid staleness
+  const updatedRequestRow = page.locator('tr').filter({ hasText: '9999999999' }).first();
+  await expect(updatedRequestRow).toBeVisible();
+
+  // Verify the Complete Job button is visible
+  const completeButton = updatedRequestRow.locator('button:has-text("Complete Job")');
+  await expect(completeButton).toBeVisible();
+
+  // Click it to complete the job
+  await completeButton.click();
+
+  // It should update to Completed badge
+  await expect(page.locator('span:has-text("Completed")').first()).toBeVisible({ timeout: 15000 });
+  // The button should go away too
+  await expect(completeButton).toBeHidden();
 });

@@ -1,0 +1,7 @@
+﻿
+Running 1 test using 1 worker
+
+
+  Γ£ô  1 [chromium] ΓÇ║ tests\logistics-loop.spec.js:15:1 ΓÇ║ End-to-End Logistics Loop (3.6s)
+
+  1 passed (6.4s)

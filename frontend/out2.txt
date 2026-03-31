@@ -1,0 +1,34 @@
+﻿
+Running 1 test using 1 worker
+
+
+  Γ£ÿ  1 [chromium] ΓÇ║ tests\logistics-loop.spec.js:15:1 ΓÇ║ End-to-End Logistics Loop (7.5s)
+
+
+  1) [chromium] ΓÇ║ tests\logistics-loop.spec.js:15:1 ΓÇ║ End-to-End Logistics Loop ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator: locator('.leaflet-container')
+    Expected: visible
+    Timeout: 5000ms
+    Error: element(s) not found
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 5000ms[22m
+    [2m  - waiting for locator('.leaflet-container')[22m
+
+
+      74 |   
+      75 |   // Assert Map is visible
+    > 76 |   await expect(page.locator('.leaflet-container')).toBeVisible();
+         |                                                    ^
+      77 |   
+      78 |   // Wait for polyline (it uses svg path with leaflet-interactive class)
+      79 |   await expect(page.locator('path.leaflet-interactive').first()).toBeVisible({ timeout: 15000 });
+        at C:\Users\jeeth\Downloads\Gis project final folder\frontend\tests\logistics-loop.spec.js:76:52
+
+    Error Context: test-results\logistics-loop-End-to-End-Logistics-Loop-chromium\error-context.md
+
+  1 failed
+    [chromium] ΓÇ║ tests\logistics-loop.spec.js:15:1 ΓÇ║ End-to-End Logistics Loop ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
