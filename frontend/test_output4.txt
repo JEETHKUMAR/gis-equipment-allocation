@@ -1,0 +1,67 @@
+
+Running 3 tests using 3 workers
+
+
+  ✓  3 [firefox] › tests\logistics-loop.spec.js:15:1 › End-to-End Logistics Loop (6.3s)
+  ✘  1 [webkit] › tests\logistics-loop.spec.js:15:1 › End-to-End Logistics Loop (22.0s)
+  ✘  2 [chromium] › tests\logistics-loop.spec.js:15:1 › End-to-End Logistics Loop (20.1s)
+
+
+  1) [chromium] › tests\logistics-loop.spec.js:15:1 › End-to-End Logistics Loop ────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator:  locator('path.leaflet-interactive').first()
+    Expected: visible
+    Received: hidden
+    Timeout:  15000ms
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for locator('path.leaflet-interactive').first()[22m
+    [2m    18 × locator resolved to <path fill="none" stroke="blue" stroke-width="4" stroke-opacity="1" d="M591 232L591 263" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5, 10" class="leaflet-interactive"></path>[22m
+    [2m       - unexpected value "hidden"[22m
+
+
+      77 |   
+      78 |   // Wait for polyline (it uses svg path with leaflet-interactive class)
+    > 79 |   await expect(page.locator('path.leaflet-interactive').first()).toBeVisible({ timeout: 15000 });
+         |                                                                  ^
+      80 |   
+      81 |   const pathCount = await page.locator('path.leaflet-interactive').count();
+      82 |   expect(pathCount).toBeGreaterThan(0);
+        at C:\Users\jeeth\Downloads\Gis project final folder\frontend\tests\logistics-loop.spec.js:79:66
+
+    Error Context: test-results\logistics-loop-End-to-End-Logistics-Loop-chromium\error-context.md
+
+  2) [webkit] › tests\logistics-loop.spec.js:15:1 › End-to-End Logistics Loop ──────────────────────
+
+    Error: [2mexpect([22m[31mlocator[39m[2m).[22mtoBeVisible[2m([22m[2m)[22m failed
+
+    Locator:  locator('path.leaflet-interactive').first()
+    Expected: visible
+    Received: hidden
+    Timeout:  15000ms
+
+    Call log:
+    [2m  - Expect "toBeVisible" with timeout 15000ms[22m
+    [2m  - waiting for locator('path.leaflet-interactive').first()[22m
+    [2m    16 × locator resolved to <path fill="none" stroke="blue" stroke-width="4" stroke-opacity="1" d="M591 232L591 263" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5, 10" class="leaflet-interactive"></path>[22m
+    [2m       - unexpected value "hidden"[22m
+
+
+      77 |   
+      78 |   // Wait for polyline (it uses svg path with leaflet-interactive class)
+    > 79 |   await expect(page.locator('path.leaflet-interactive').first()).toBeVisible({ timeout: 15000 });
+         |                                                                  ^
+      80 |   
+      81 |   const pathCount = await page.locator('path.leaflet-interactive').count();
+      82 |   expect(pathCount).toBeGreaterThan(0);
+        at C:\Users\jeeth\Downloads\Gis project final folder\frontend\tests\logistics-loop.spec.js:79:66
+
+    Error Context: test-results\logistics-loop-End-to-End-Logistics-Loop-webkit\error-context.md
+
+  2 failed
+    [chromium] › tests\logistics-loop.spec.js:15:1 › End-to-End Logistics Loop ─────────────────────
+    [webkit] › tests\logistics-loop.spec.js:15:1 › End-to-End Logistics Loop ───────────────────────
+  1 passed (26.0s)

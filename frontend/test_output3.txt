@@ -1,0 +1,78 @@
+
+Running 3 tests using 3 workers
+
+BROWSER >> [vite] connecting...
+BROWSER >> [vite] connecting...
+BROWSER >> [vite] connected.
+BROWSER >> [vite] connected.
+BROWSER >> %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold
+BROWSER >> Failed to load resource: the server responded with a status of 400 (Bad Request)
+BROWSER >> [vite] connecting...
+BROWSER >> [vite] connected.
+BROWSER >> Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+BROWSER >> Failed to load resource: the server responded with a status of 400 (Bad Request)
+  ✘  3 [webkit] › tests\evaluation-demo.spec.js:20:3 › Evaluation Demo Flow › Evaluation Flow - Logistics Loop (6.1s)
+BROWSER >> [JavaScript Warning: "MouseEvent.mozPressure is deprecated. Use PointerEvent.pressure instead." {file: "http://localhost:3000/node_modules/.vite/deps/chunk-INLKKZW7.js?v=8a496d88" line: 18}]
+BROWSER >> [JavaScript Warning: "MouseEvent.mozInputSource is deprecated. Use PointerEvent.pointerType instead." {file: "http://localhost:3000/node_modules/.vite/deps/chunk-INLKKZW7.js?v=8a496d88" line: 18}]
+  ✘  2 [firefox] › tests\evaluation-demo.spec.js:20:3 › Evaluation Demo Flow › Evaluation Flow - Logistics Loop (5.3s)
+  ✘  1 [chromium] › tests\evaluation-demo.spec.js:20:3 › Evaluation Demo Flow › Evaluation Flow - Logistics Loop (3.6s)
+
+
+  1) [chromium] › tests\evaluation-demo.spec.js:20:3 › Evaluation Demo Flow › Evaluation Flow - Logistics Loop 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32m200[39m
+    Received: [31m400[39m
+
+      75 |
+      76 |     const approveRes = await approvePromise;
+    > 77 |     expect(approveRes.status()).toBe(200); // Expecting node to proxy the GIS 200 return
+         |                                 ^
+      78 |
+      79 |     await expect(requestRow.locator('span:has-text("Approved")')).toBeVisible({ timeout: 15000 });
+      80 |
+        at C:\Users\jeeth\Downloads\Gis project final folder\frontend\tests\evaluation-demo.spec.js:77:33
+
+    Error Context: test-results\evaluation-demo-Evaluation-c57ef-ation-Flow---Logistics-Loop-chromium\error-context.md
+
+  2) [firefox] › tests\evaluation-demo.spec.js:20:3 › Evaluation Demo Flow › Evaluation Flow - Logistics Loop 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32m200[39m
+    Received: [31m400[39m
+
+      75 |
+      76 |     const approveRes = await approvePromise;
+    > 77 |     expect(approveRes.status()).toBe(200); // Expecting node to proxy the GIS 200 return
+         |                                 ^
+      78 |
+      79 |     await expect(requestRow.locator('span:has-text("Approved")')).toBeVisible({ timeout: 15000 });
+      80 |
+        at C:\Users\jeeth\Downloads\Gis project final folder\frontend\tests\evaluation-demo.spec.js:77:33
+
+    Error Context: test-results\evaluation-demo-Evaluation-c57ef-ation-Flow---Logistics-Loop-firefox\error-context.md
+
+  3) [webkit] › tests\evaluation-demo.spec.js:20:3 › Evaluation Demo Flow › Evaluation Flow - Logistics Loop 
+
+    Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32m200[39m
+    Received: [31m400[39m
+
+      75 |
+      76 |     const approveRes = await approvePromise;
+    > 77 |     expect(approveRes.status()).toBe(200); // Expecting node to proxy the GIS 200 return
+         |                                 ^
+      78 |
+      79 |     await expect(requestRow.locator('span:has-text("Approved")')).toBeVisible({ timeout: 15000 });
+      80 |
+        at C:\Users\jeeth\Downloads\Gis project final folder\frontend\tests\evaluation-demo.spec.js:77:33
+
+    Error Context: test-results\evaluation-demo-Evaluation-c57ef-ation-Flow---Logistics-Loop-webkit\error-context.md
+
+  3 failed
+    [chromium] › tests\evaluation-demo.spec.js:20:3 › Evaluation Demo Flow › Evaluation Flow - Logistics Loop 
+    [firefox] › tests\evaluation-demo.spec.js:20:3 › Evaluation Demo Flow › Evaluation Flow - Logistics Loop 
+    [webkit] › tests\evaluation-demo.spec.js:20:3 › Evaluation Demo Flow › Evaluation Flow - Logistics Loop 

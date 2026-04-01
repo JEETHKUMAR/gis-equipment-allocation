@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
 import L from 'leaflet';
 
 // Fix for default Leaflet marker icons in React
@@ -25,74 +28,30 @@ function LocationMarker({ position, setPosition }) {
 }
 
 export default function FarmerApp() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [step, setStep] = useState('mobile'); // 'mobile' | 'otp'
-  const [mobile, setMobile] = useState('');
-  const [otp, setOtp] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  
+  const navigate = useNavigate();
   const [equipmentType, setEquipmentType] = useState('Tractor');
   const [position, setPosition] = useState(null);
-  const [toast, setToast] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSendOtp = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/auth/request-otp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setStep('otp');
-      } else {
-        setError(data.error || 'Failed to send OTP');
-      }
-    } catch (err) {
-      setError('Network error. Ensure API gateway is running.');
+  useEffect(() => {
+    if (!localStorage.getItem('auth_token')) {
+      navigate('/login');
     }
-    setLoading(false);
-  };
-
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-    try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/auth/verify-otp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mobile, otp })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        // Store JWT token securely
-        localStorage.setItem('auth_token', data.token);
-        setIsLoggedIn(true);
-      } else {
-        setError(data.error || 'Invalid OTP');
-      }
-    } catch (err) {
-      setError('Network error during verification.');
-    }
-    setLoading(false);
-  };
+  }, [navigate]);
 
   const handleSubmitRequest = async (e) => {
     e.preventDefault();
     if (!position) {
-      alert("Please drop a pin on the map for your farm location.");
+      toast.error("Please drop a pin on the map for your farm location.");
       return;
     }
     
     try {
+      setLoading(true);
       const token = localStorage.getItem('auth_token');
+      const mobile = localStorage.getItem('farmer_id') || 'farmer_user';
       const payload = {
-        farmer_id: mobile || 'farmer_user',
+        farmer_id: mobile,
         equipment_type: equipmentType,
         farm_size: 10,
         crop: 'Wheat',
@@ -110,104 +69,37 @@ export default function FarmerApp() {
       
       const data = await res.json();
       if (res.ok) {
-        setToast(`Request confirmed! Status: ${data.request?.status || 'Allocated'}`);
-        setTimeout(() => setToast(''), 5000);
+        // We trigger the toast to exact text match the Playwright tests that read "text=Request confirmed!"
+        toast.success(`Request confirmed! Status: ${data.request?.status || 'Allocated'}`);
+        // Instead of custom toast timeout, relying on react-hot-toast. Playwright expects the text to just be visible.
       } else {
-        alert(data.error || 'Failed to submit request');
+        toast.error(data.error || 'Failed to submit request');
       }
     } catch (err) {
-      alert('Network error submitting request');
+      toast.error('Network error submitting request');
+    } finally {
+      setLoading(false);
     }
   };
 
-  if (!isLoggedIn) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex flex-col justify-center items-center p-4">
-        <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm mb-16 relative overflow-hidden">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight">Farmer Login</h2>
-            <p className="mt-2 text-sm text-gray-500">Access your equipment dashboard</p>
-          </div>
-          
-          {error && <div className="mb-6 text-sm text-red-600 bg-red-50 p-3 rounded-xl border border-red-100">{error}</div>}
-
-          {step === 'mobile' ? (
-            <form onSubmit={handleSendOtp} className="space-y-6">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Mobile Number</label>
-                <input 
-                  type="text" 
-                  value={mobile} 
-                  onChange={e => setMobile(e.target.value)} 
-                  required 
-                  disabled={loading}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors shadow-sm disabled:bg-gray-100"
-                  placeholder="+91 99999 99999"
-                />
-              </div>
-              <button 
-                type="submit" 
-                disabled={loading}
-                className="w-full bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-bold py-3.5 rounded-xl transition duration-200 mt-4 shadow-lg transform active:scale-[0.98] disabled:opacity-70"
-              >
-                {loading ? 'Sending OTP...' : 'Send OTP'}
-              </button>
-            </form>
-          ) : (
-            <form onSubmit={handleVerifyOtp} className="space-y-6">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Enter OTP sent to {mobile}</label>
-                <input 
-                  type="text" 
-                  value={otp} 
-                  onChange={e => setOtp(e.target.value)} 
-                  required 
-                  disabled={loading}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors shadow-sm tracking-widest text-center text-xl font-bold disabled:bg-gray-100"
-                  placeholder="• • • • • •"
-                  maxLength={6}
-                />
-              </div>
-              <button 
-                type="submit" 
-                disabled={loading}
-                className="w-full bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-bold py-3.5 rounded-xl transition duration-200 mt-4 shadow-lg transform active:scale-[0.98] disabled:opacity-70"
-              >
-                {loading ? 'Verifying...' : 'Secure Login'}
-              </button>
-              <div className="text-center mt-4">
-                <button 
-                  type="button" 
-                  onClick={() => { setStep('mobile'); setError(''); setOtp(''); }}
-                  className="text-green-600 font-semibold text-sm hover:underline"
-                >
-                  Change Mobile Number
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center">
-      <div className="w-full max-w-md bg-white min-h-screen flex flex-col md:min-h-[850px] md:my-10 md:rounded-3xl md:shadow-2xl overflow-hidden relative">
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="min-h-screen bg-gray-50 flex flex-col items-center"
+    >
+      <div className="w-full max-w-md bg-white min-h-screen flex flex-col md:min-h-[850px] md:my-10 md:rounded-3xl md:shadow-2xl overflow-hidden relative border border-gray-100">
         
+        {/* Header Ribbon UI flair */}
+        <div className="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-green-400 to-green-600 z-50"></div>
+
         {/* Header */}
-        <div className="bg-green-600 text-white p-6 shadow-md z-10 relative">
+        <div className="bg-green-600 text-white p-6 shadow-md z-10 relative pt-8">
           <h2 className="text-2xl font-bold tracking-wide">Request Equipment</h2>
           <p className="text-green-100 text-sm mt-1">Select and pinpoint delivery location</p>
         </div>
 
-        {/* Toast Notification */}
-        {toast && (
-          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center z-[2000] border border-green-400 w-[90%] md:w-auto">
-            <svg className="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-            <span className="font-semibold text-sm whitespace-nowrap">{toast}</span>
-          </div>
-        )}
+
 
         <form onSubmit={handleSubmitRequest} className="flex flex-col flex-grow p-5 space-y-6">
           {/* Equipment Selector */}
@@ -270,13 +162,14 @@ export default function FarmerApp() {
           <div className="mt-auto pt-4 pb-2">
             <button 
               type="submit" 
-              className="w-full bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-extrabold text-lg py-4 rounded-2xl shadow-[0_4px_14px_0_rgba(22,163,74,0.39)] transition-all transform active:scale-95"
+              disabled={loading}
+              className="w-full bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-extrabold text-lg py-4 rounded-2xl shadow-[0_4px_14px_0_rgba(22,163,74,0.39)] transition-all transform hover:-translate-y-0.5 active:translate-y-0 active:scale-95 disabled:opacity-70 disabled:hover:translate-y-0"
             >
-              Submit Request
+              {loading ? 'Processing...' : 'Submit Request'}
             </button>
           </div>
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 }

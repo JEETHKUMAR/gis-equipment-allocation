@@ -95,8 +95,13 @@ router.put('/:id/status', async (req, res) => {
       return res.status(200).json({ request: requestDoc });
     }
   } catch (err) {
-    console.error('Error during allocation:', err.message);
-    res.status(400).json({ error: err.message });
+    if (err.response) {
+      console.error('Error during allocation GIS response:', err.response.data);
+      res.status(400).json({ error: err.response.data.detail || err.response.data.message || err.message });
+    } else {
+      console.error('Error during allocation JS:', err.stack || err);
+      res.status(400).json({ error: err.message || 'Unknown error' });
+    }
   }
 });
 

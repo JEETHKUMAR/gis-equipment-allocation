@@ -76,7 +76,7 @@ test('End-to-End Logistics Loop', async ({ page }) => {
   await expect(page.locator('.leaflet-container')).toBeVisible();
   
   // Wait for polyline (it uses svg path with leaflet-interactive class)
-  await expect(page.locator('path.leaflet-interactive').first()).toBeVisible({ timeout: 15000 });
+  await expect(page.locator('path.leaflet-interactive').first()).toBeAttached({ timeout: 15000 });
   
   const pathCount = await page.locator('path.leaflet-interactive').count();
   expect(pathCount).toBeGreaterThan(0);

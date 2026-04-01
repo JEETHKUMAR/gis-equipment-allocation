@@ -25,22 +25,33 @@ const greenIcon = new L.Icon({
 export default function AdminDashboard() {
   const [activeRoutes, setActiveRoutes] = useState([]);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [kpis, setKpis] = useState({ requests: 0, tractors: 0, dispatch: 0 });
 
   useEffect(() => {
-    const fetchRoutes = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/dashboard/active-routes`);
-        const data = await res.json();
-        if (res.ok) {
-          setActiveRoutes(data);
+        const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+        const resRoutes = await fetch(`${apiUrl}/api/dashboard/active-routes`);
+        if (resRoutes.ok) {
+          const dataRoutes = await resRoutes.json();
+          setActiveRoutes(dataRoutes);
+        }
+
+        const resDash = await fetch(`${apiUrl}/api/dashboard`);
+        if (resDash.ok) {
+          const dashData = await resDash.json();
+          const requestsCount = dashData.requests?.filter(r => r.status === 'pending').length || 0;
+          const tractorsCount = dashData.equipment?.filter(e => e.status === 'available' && e.type === 'Tractor').length || 0;
+          const dispatchCount = dashData.equipment?.filter(e => e.status === 'assigned').length || 0;
+          setKpis({ requests: requestsCount, tractors: tractorsCount, dispatch: dispatchCount });
         }
       } catch (err) {
-        console.error('Error fetching routes:', err);
+        console.error('Error fetching data:', err);
       }
     };
     
-    fetchRoutes();
-    const interval = setInterval(fetchRoutes, 5000);
+    fetchData();
+    const interval = setInterval(fetchData, 5000);
     return () => clearInterval(interval);
   }, []);
 
@@ -79,8 +90,9 @@ export default function AdminDashboard() {
                 Requests
               </button>
               <button 
-                onClick={() => setActiveTab('settings')} 
-                className={`px-1 pt-1 text-sm font-medium transition-colors border-b-2 ${activeTab === 'settings' ? 'border-green-500 text-white' : 'border-transparent text-gray-300 hover:text-white hover:border-gray-300'}`}
+                disabled
+                title="Coming Soon"
+                className="px-1 pt-1 text-sm font-medium transition-colors border-b-2 border-transparent text-gray-500 opacity-50 cursor-not-allowed"
               >
                 Settings
               </button>
@@ -99,30 +111,30 @@ export default function AdminDashboard() {
           <>
             {/* KPI Status Row */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow">
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-lg hover:-translate-y-1 transition-all">
             <div>
               <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Active Requests</p>
-              <p className="text-3xl font-bold text-gray-900 mt-1">24</p>
+              <p className="text-3xl font-bold text-gray-900 mt-1">{kpis.requests}</p>
             </div>
             <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-2xl">
               📋
             </div>
           </div>
           
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow">
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-lg hover:-translate-y-1 transition-all">
             <div>
               <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Available Tractors</p>
-              <p className="text-3xl font-bold text-gray-900 mt-1">18</p>
+              <p className="text-3xl font-bold text-gray-900 mt-1">{kpis.tractors}</p>
             </div>
             <div className="w-12 h-12 bg-green-50 text-green-600 rounded-xl flex items-center justify-center text-2xl">
               🚜
             </div>
           </div>
           
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow">
+          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-lg hover:-translate-y-1 transition-all">
             <div>
               <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Dispatched Fleets</p>
-              <p className="text-3xl font-bold text-gray-900 mt-1">12</p>
+              <p className="text-3xl font-bold text-gray-900 mt-1">{kpis.dispatch}</p>
             </div>
             <div className="w-12 h-12 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center text-2xl">
               🚚
@@ -137,11 +149,7 @@ export default function AdminDashboard() {
         {activeTab === 'fleets' && <FleetManager />}
         {activeTab === 'requests' && <RequestManager />}
         
-        {activeTab === 'settings' && (
-          <div className="bg-white rounded-3xl p-12 shadow-sm border border-gray-100 flex items-center justify-center text-gray-500">
-            <p className="text-xl font-medium">Content for {activeTab} coming soon.</p>
-          </div>
-        )}
+
 
       </main>
     </div>

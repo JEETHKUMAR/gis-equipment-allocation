@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
+import { Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function RequestManager() {
   const [requests, setRequests] = useState([]);
@@ -37,7 +40,7 @@ export default function RequestManager() {
         fetchRequests();
       } else if (res.status === 400) {
         const errorData = await res.json();
-        alert(`Allocation Failed: ${errorData.error}`);
+        toast.error(`Allocation Failed: ${errorData.error}`);
       } else {
         console.error('Failed to update status');
       }
@@ -59,7 +62,7 @@ export default function RequestManager() {
         fetchRequests();
       } else {
         const errorData = await res.json();
-        alert(`Failed to complete job: ${errorData.error || 'Unknown error'}`);
+        toast.error(`Failed to complete job: ${errorData.error || 'Unknown error'}`);
       }
     } catch (err) {
       console.error('Error completing job:', err);
@@ -107,15 +110,26 @@ export default function RequestManager() {
           <tbody className="divide-y divide-gray-100">
             {loading ? (
               <tr>
-                <td colSpan="5" className="px-6 py-8 text-center text-gray-500">Loading requests...</td>
+                <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
+                  <div className="flex flex-col items-center justify-center space-y-2">
+                    <Loader2 className="w-8 h-8 animate-spin text-green-600" />
+                    <span>Loading requests...</span>
+                  </div>
+                </td>
               </tr>
             ) : requests.length === 0 ? (
               <tr>
                 <td colSpan="5" className="px-6 py-8 text-center text-gray-500">No requests found.</td>
               </tr>
             ) : (
-              requests.map((req) => (
-                <tr key={req._id || req.id} className="hover:bg-gray-50 transition-colors">
+              requests.map((req, index) => (
+                <motion.tr 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  key={req._id || req.id} 
+                  className="hover:bg-gray-50 transition-colors"
+                >
                   <td className="px-6 py-4 font-medium text-gray-900">{req.farmer_id}</td>
                   <td className="px-6 py-4 text-gray-600">
                     {req.equipment_type} <span className="text-xs text-gray-400">({req.farm_size} acres, {req.crop})</span>
@@ -131,13 +145,13 @@ export default function RequestManager() {
                       <>
                         <button 
                           onClick={() => handleUpdateStatus(req._id || req.id, 'approved')}
-                          className="text-green-700 hover:text-green-900 font-medium px-3 py-1 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg transition-colors"
+                          className="text-green-700 hover:text-green-900 font-medium px-3 py-1 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg transition-all hover:scale-105"
                         >
                           Approve
                         </button>
                         <button 
                           onClick={() => handleUpdateStatus(req._id || req.id, 'rejected')}
-                          className="text-red-700 hover:text-red-900 font-medium px-3 py-1 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg transition-colors"
+                          className="text-red-700 hover:text-red-900 font-medium px-3 py-1 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg transition-all hover:scale-105"
                         >
                           Reject
                         </button>
@@ -145,7 +159,7 @@ export default function RequestManager() {
                     ) : (req.status === 'approved' || req.status === 'allocated') ? (
                       <button 
                         onClick={() => handleCompleteRequest(req._id || req.id)}
-                        className="text-blue-700 hover:text-blue-900 font-medium px-3 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors shadow-sm"
+                        className="text-blue-700 hover:text-blue-900 font-medium px-3 py-1 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-all shadow-sm hover:scale-105"
                       >
                         Complete Job
                       </button>
@@ -153,7 +167,7 @@ export default function RequestManager() {
                       <span className="text-gray-400 text-sm italic pr-2">Processed</span>
                     )}
                   </td>
-                </tr>
+                </motion.tr>
               ))
             )}
           </tbody>

@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
+import toast from 'react-hot-toast';
 
 export default function FleetManager() {
   const [fleet, setFleet] = useState([]);
@@ -8,16 +11,21 @@ export default function FleetManager() {
     lat: 30.7333,
     lng: 76.7794
   });
+  const [loading, setLoading] = useState(true);
 
   const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
   const fetchFleet = async () => {
     try {
+      setLoading(true);
       const res = await fetch(`${apiUrl}/api/fleet`);
       const data = await res.json();
       setFleet(data);
     } catch (err) {
+      toast.error('Error fetching fleet');
       console.error('Error fetching fleet:', err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,11 +57,14 @@ export default function FleetManager() {
       
       if (res.ok) {
         setFormData({ ...formData, name: '' });
+        toast.success('Equipment added successfully');
         fetchFleet();
       } else {
+        toast.error('Failed to add equipment');
         console.error('Failed to add equipment');
       }
     } catch (err) {
+      toast.error('Error adding equipment');
       console.error('Error adding equipment:', err);
     }
   };
@@ -62,9 +73,11 @@ export default function FleetManager() {
     try {
       const res = await fetch(`${apiUrl}/api/fleet/${id}`, { method: 'PUT' });
       if (res.ok) {
+        toast.success("Status updated");
         fetchFleet();
       }
     } catch (err) {
+      toast.error('Error toggling status');
       console.error('Error toggling status:', err);
     }
   };
@@ -74,9 +87,11 @@ export default function FleetManager() {
     try {
       const res = await fetch(`${apiUrl}/api/fleet/${id}`, { method: 'DELETE' });
       if (res.ok) {
+        toast.success("Equipment deleted");
         fetchFleet();
       }
     } catch (err) {
+      toast.error('Error deleting equipment');
       console.error('Error deleting equipment:', err);
     }
   };
@@ -137,7 +152,7 @@ export default function FleetManager() {
           </div>
           <button 
             type="submit" 
-            className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-md transition-all active:scale-95"
+            className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl shadow-md transition-all hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
           >
             Add Equipment
           </button>
@@ -159,15 +174,30 @@ export default function FleetManager() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {fleet.length === 0 ? (
+              {loading ? (
+                <tr>
+                  <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
+                    <div className="flex flex-col items-center justify-center space-y-2">
+                      <Loader2 className="w-8 h-8 animate-spin text-green-600" />
+                      <span>Loading fleet data...</span>
+                    </div>
+                  </td>
+                </tr>
+              ) : fleet.length === 0 ? (
                 <tr>
                   <td colSpan="5" className="px-6 py-8 text-center text-gray-500">
                     No equipment found in the fleet. Add some above.
                   </td>
                 </tr>
               ) : (
-                fleet.map((item) => (
-                  <tr key={item._id || item.id} className="hover:bg-gray-50 transition-colors">
+                fleet.map((item, index) => (
+                  <motion.tr 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    key={item._id || item.id} 
+                    className="hover:bg-gray-50 transition-colors"
+                  >
                     <td className="px-6 py-4 font-medium text-gray-900">{item.name}</td>
                     <td className="px-6 py-4 text-gray-600">{item.type}</td>
                     <td className="px-6 py-4">
@@ -185,18 +215,18 @@ export default function FleetManager() {
                     <td className="px-6 py-4 text-right flex justify-end gap-3">
                       <button 
                         onClick={() => handleToggleStatus(item._id || item.id)}
-                        className="text-blue-600 hover:text-blue-800 font-medium px-3 py-1 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors"
+                        className="text-blue-600 hover:text-blue-800 font-medium px-3 py-1 bg-blue-50 hover:bg-blue-100 rounded-lg transition-all hover:scale-105"
                       >
                         Toggle Status
                       </button>
                       <button 
                         onClick={() => handleDelete(item._id || item.id)}
-                        className="text-red-600 hover:text-red-800 font-medium px-3 py-1 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
+                        className="text-red-600 hover:text-red-800 font-medium px-3 py-1 bg-red-50 hover:bg-red-100 rounded-lg transition-all hover:scale-105"
                       >
                         Delete
                       </button>
                     </td>
-                  </tr>
+                  </motion.tr>
                 ))
               )}
             </tbody>
