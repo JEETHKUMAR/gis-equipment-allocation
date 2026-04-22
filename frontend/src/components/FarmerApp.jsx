@@ -32,12 +32,49 @@ export default function FarmerApp() {
   const [equipmentType, setEquipmentType] = useState('Tractor');
   const [position, setPosition] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [activeRequests, setActiveRequests] = useState([]);
+  
+  const fetchMyRequests = async () => {
+    try {
+      const mobile = localStorage.getItem('farmer_id');
+      if (!mobile) return;
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/requests`);
+      if (res.ok) {
+        const data = await res.json();
+        const myActive = data.filter(r => r.farmer_id === mobile && (r.status === 'allocated' || r.status === 'approved'));
+        setActiveRequests(myActive);
+      }
+    } catch (err) {
+      console.error('Failed to fetch requests', err);
+    }
+  };
 
   useEffect(() => {
     if (!localStorage.getItem('auth_token')) {
       navigate('/login');
+    } else {
+      fetchMyRequests();
+      const interval = setInterval(fetchMyRequests, 5000);
+      return () => clearInterval(interval);
     }
   }, [navigate]);
+
+  const handleCompleteJob = async (reqId) => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/requests/${reqId}/complete`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (res.ok) {
+        toast.success("Job marked as complete. Equipment released!");
+        fetchMyRequests();
+      } else {
+        toast.error("Failed to complete job.");
+      }
+    } catch (err) {
+      toast.error("Network error.");
+    }
+  };
 
   const handleSubmitRequest = async (e) => {
     e.preventDefault();
@@ -71,7 +108,7 @@ export default function FarmerApp() {
       if (res.ok) {
         // We trigger the toast to exact text match the Playwright tests that read "text=Request confirmed!"
         toast.success(`Request confirmed! Status: ${data.request?.status || 'Allocated'}`);
-        // Instead of custom toast timeout, relying on react-hot-toast. Playwright expects the text to just be visible.
+        fetchMyRequests();
       } else {
         toast.error(data.error || 'Failed to submit request');
       }
@@ -169,6 +206,28 @@ export default function FarmerApp() {
             </button>
           </div>
         </form>
+
+        {activeRequests.length > 0 && (
+          <div className="p-5 border-t border-gray-100 bg-gray-50 flex-grow">
+            <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wider mb-4">Active Equipment</h3>
+            <div className="space-y-4">
+              {activeRequests.map(req => (
+                <div key={req._id} className="bg-white p-4 rounded-xl shadow-sm border border-green-100 flex justify-between items-center">
+                  <div>
+                    <p className="font-bold text-gray-900">{req.equipment_type}</p>
+                    <p className="text-xs text-gray-500 mt-1">Dispatched to your location</p>
+                  </div>
+                  <button 
+                    onClick={() => handleCompleteJob(req._id)}
+                    className="text-xs font-bold bg-green-100 hover:bg-green-200 text-green-700 py-2 px-3 rounded-lg transition-colors"
+                  >
+                    Complete Job
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   );

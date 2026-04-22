@@ -41,32 +41,35 @@ test('End-to-End Logistics Loop', async ({ page }) => {
   await page.click('button:has-text("Submit Request")');
   
   // Expect toast confirmation
-  await expect(page.locator('text=Request confirmed!')).toBeVisible({ timeout: 10000 });
+  await expect(page.getByText(/Request confirmed/i)).toBeVisible({ timeout: 10000 });
 
   // Wait a moment for DB persistence
   await page.waitForTimeout(1000);
 
   // 2. Admin Flow
+  // Logout from farmer view
+  await page.click('button:has-text("Logout")');
+  
+  // Back to landing page, click Admin Dashboard View
   await page.click('button:has-text("Admin Dashboard View")');
   
+  // Admin Login
+  await page.fill('input[placeholder="admin"]', 'admin');
+  await page.fill('input[placeholder="••••••••"]', 'admin123');
+  await page.click('button:has-text("Secure Login")');
+
   // Verify Admin Dashboard loads
   await expect(page.locator('text=AgriConnect Admin')).toBeVisible();
 
   // 3. The Brain Flow - Requests
   await page.locator('text="Requests"').first().click({ force: true });
   
-  // Find the request row we just made (Harvester) and Approve it
+  // Find the request row we just made (Harvester) and check that it's already Allocated
   const requestRow = page.locator('tr').filter({ hasText: '9999999999' }).first();
   await expect(requestRow).toBeVisible();
   
-  // Check if it's pending to approve, if not, it may already be processed (unlikely in this flow, but good practice)
-  const isPending = await requestRow.locator('button:has-text("Approve")').isVisible();
-  if (isPending) {
-    await requestRow.locator('button:has-text("Approve")').click();
-  }
-
-  // Wait for status to change to Approved globally, avoiding stale references
-  await expect(page.locator('span:has-text("Approved")').first()).toBeVisible({ timeout: 15000 });
+  // With automated dispatch, it should be Allocated automatically
+  await expect(requestRow.locator('span:has-text("Allocated")').first()).toBeVisible({ timeout: 15000 });
 
   // 4. Map Flow
   // The tab is labeled "Dashboard"

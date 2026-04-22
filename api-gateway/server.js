@@ -67,37 +67,98 @@ app.post('/api/auth/verify-otp', (req, res) => {
   return res.json({ token, message: 'Login successful', farmer_id: mobile });
 });
 
-// 2. Create an equipment request
+// 1c. Admin Login
+app.post('/api/auth/admin-login', (req, res) => {
+  const { username, password } = req.body;
+  if (username === 'admin' && password === 'admin123') {
+    const jwtSecret = process.env.JWT_SECRET || 'fallback-super-secret-key';
+    const token = jwt.sign({ username, role: 'admin' }, jwtSecret, { expiresIn: '24h' });
+    return res.json({ token, message: 'Admin login successful' });
+  }
+  return res.status(401).json({ error: 'Invalid admin credentials' });
+});
+
+// 2. Create an equipment request and automatically dispatch
 app.post('/api/requests', async (req, res) => {
   try {
     const { farmer_id, equipment_type, farm_size, crop, location } = req.body;
     
-    // Ensure location follows GeoJSON Point format
     if (!location || !location.coordinates || location.coordinates.length !== 2) {
       return res.status(400).json({ error: 'Valid GeoJSON location [lat, lng] is required' });
     }
 
-    // Convert Frontend [Lat, Lng] to GeoJSON [Lng, Lat]
     const lonLat = [location.coordinates[1], location.coordinates[0]];
+    
+    // Calculate priority based on farm size or crop
+    let priority = 'medium';
+    if (farm_size > 20 || ['Wheat', 'Rice'].includes(crop)) priority = 'high';
+    else if (farm_size < 5) priority = 'low';
 
-    let reqStatus = 'pending';
-    let allocatedEquipId = null;
+    // Estimate capacity needed (e.g. 1 unit of capacity per acre)
+    const capacity_required = farm_size || 10;
 
     const newRequest = new Request({
       farmer_id,
       equipment_type,
       farm_size: farm_size || 10,
+      capacity_required,
+      priority,
       crop: crop || 'Wheat',
-      location: {
-        type: 'Point',
-        coordinates: lonLat // [Lng, Lat]
-      },
-      status: reqStatus,
-      allocated_equipment: allocatedEquipId
+      location: { type: 'Point', coordinates: lonLat },
+      status: 'pending',
+      allocated_equipment: null
     });
 
-    const savedRequest = await newRequest.save();
-    res.status(201).json({ message: 'Request processed', request: savedRequest });
+    let savedRequest = await newRequest.save();
+
+    // Auto-Dispatch Logic
+    const availableEquipment = await Equipment.find({ 
+      type: equipment_type, 
+      status: 'available',
+      capacity: { $gte: capacity_required } // Constraint Check
+    });
+
+    if (availableEquipment.length > 0) {
+      const equipmentList = availableEquipment.map(eq => ({
+        id: eq._id.toString(),
+        name: eq.name,
+        type: eq.type,
+        capacity: eq.capacity,
+        location: { type: 'Point', coordinates: eq.location.coordinates },
+        status: eq.status
+      }));
+
+      const payload = {
+        request_location: lonLat, // [Lng, Lat]
+        request_priority: priority,
+        equipment_list: equipmentList,
+        max_radius_km: 50.0 
+      };
+
+      try {
+        const gisApiUrl = process.env.GIS_API_URL || 'http://localhost:8000';
+        const pythonRes = await axios.post(`${gisApiUrl}/api/allocate`, payload);
+
+        if (pythonRes.data && pythonRes.data.assigned_equipment) {
+          const allocatedEquipId = pythonRes.data.assigned_equipment.id;
+          await Equipment.findByIdAndUpdate(allocatedEquipId, { status: 'assigned' });
+          savedRequest.status = 'allocated';
+          savedRequest.allocated_equipment = allocatedEquipId;
+          savedRequest = await savedRequest.save();
+          savedRequest = await Request.findById(savedRequest._id).populate('allocated_equipment');
+          return res.status(201).json({ 
+            message: 'Request automatically allocated', 
+            request: savedRequest,
+            routing: pythonRes.data 
+          });
+        }
+      } catch (gisError) {
+        console.error("GIS engine auto-allocation failed:", gisError.message);
+        // Fall back to pending if GIS fails
+      }
+    }
+
+    res.status(201).json({ message: 'Request logged but pending manual intervention (no available equipment matched constraints)', request: savedRequest });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline, Popup, Circle } from 'react-leaflet';
 import L from 'leaflet';
 
 import 'leaflet/dist/leaflet.css';
@@ -31,7 +31,8 @@ const greenIcon = new L.Icon({
 });
 
 export default function AdminMap() {
-  const [requests, setRequests] = useState([]);
+  const [activeRequests, setActiveRequests] = useState([]);
+  const [pendingRequests, setPendingRequests] = useState([]);
 
   const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
@@ -42,12 +43,16 @@ export default function AdminMap() {
         const data = await res.json();
         
         // Filter for allocated requests where equipmentId exists
-        const activeRequests = data.filter(req => 
+        const active = data.filter(req => 
           (req.status === 'approved' || req.status === 'allocated') && 
           req.allocated_equipment
         );
         
-        setRequests(activeRequests);
+        // Filter for pending requests to create hotspots
+        const pending = data.filter(req => req.status === 'pending');
+        
+        setActiveRequests(active);
+        setPendingRequests(pending);
       } catch (err) {
         console.error('Error fetching requests for map:', err);
       }
@@ -74,7 +79,27 @@ export default function AdminMap() {
             attribution="&copy; OpenStreetMap contributors"
           />
           
-          {requests.map((req) => {
+          {/* Predictive Demand Hotspots */}
+          {pendingRequests.map((req) => {
+            const farmLocation = [req.location.coordinates[1], req.location.coordinates[0]];
+            const radius = req.farm_size * 50; // Size circle based on farm size
+            return (
+              <Circle 
+                key={`hotspot-${req._id}`} 
+                center={farmLocation} 
+                radius={radius > 500 ? radius : 500}
+                pathOptions={{ color: 'orange', fillColor: '#f97316', fillOpacity: 0.4, weight: 1 }}
+              >
+                <Popup>
+                  <strong>Hotspot Priority:</strong> {req.priority || 'Medium'}<br/>
+                  <strong>Need:</strong> {req.equipment_type}<br/>
+                  <strong>Capacity Req:</strong> {req.capacity_required} units
+                </Popup>
+              </Circle>
+            );
+          })}
+
+          {activeRequests.map((req) => {
             // MongoDB GeoJSON is [Lng, Lat]
             const farmLocation = [req.location.coordinates[1], req.location.coordinates[0]];
             const equipmentLocation = [
@@ -110,6 +135,11 @@ export default function AdminMap() {
 
         {/* Floating Legend Overlay - z-index is elevated tightly */}
         <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-md px-6 py-3 rounded-full shadow-2xl border border-gray-200 flex items-center gap-6 z-[1000] text-sm font-semibold text-gray-700">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-orange-400 rounded-full opacity-60"></div>
+            <span>Hotspot</span>
+          </div>
+          <div className="w-px h-6 bg-gray-300"></div>
           <div className="flex items-center gap-2">
             <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png" alt="red" className="h-5" />
             <span>Farm Need</span>

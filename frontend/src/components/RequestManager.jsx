@@ -101,6 +101,7 @@ export default function RequestManager() {
           <thead className="bg-gray-50 border-b border-gray-200 text-gray-700">
             <tr>
               <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Farmer Phone</th>
+              <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Priority</th>
               <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Equipment Requested</th>
               <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Coordinates [Lat, Lng]</th>
               <th className="px-6 py-4 font-semibold text-xs uppercase tracking-wider">Status</th>
@@ -131,6 +132,11 @@ export default function RequestManager() {
                   className="hover:bg-gray-50 transition-colors"
                 >
                   <td className="px-6 py-4 font-medium text-gray-900">{req.farmer_id}</td>
+                  <td className="px-6 py-4 font-bold text-gray-700 capitalize">
+                    <span className={req.priority === 'high' ? 'text-red-600' : req.priority === 'low' ? 'text-green-600' : 'text-yellow-600'}>
+                      {req.priority || 'medium'}
+                    </span>
+                  </td>
                   <td className="px-6 py-4 text-gray-600">
                     {req.equipment_type} <span className="text-xs text-gray-400">({req.farm_size} acres, {req.crop})</span>
                   </td>

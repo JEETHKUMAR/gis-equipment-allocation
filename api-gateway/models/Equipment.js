@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const equipmentSchema = new mongoose.Schema({
   name: { type: String, required: true }, // e.g., "Tractor A"
   type: { type: String, required: true }, // e.g., "Tractor", "Rotavator"
+  capacity: { type: Number, default: 100 }, // Capacity metric (e.g., fuel/hours limit)
   location: {
     type: {
       type: String,

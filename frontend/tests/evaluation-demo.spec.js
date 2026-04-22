@@ -52,34 +52,29 @@ test.describe('Evaluation Demo Flow', () => {
 
     const submitRes = await submitPromise;
     expect(submitRes.status()).toBe(201);
-    await expect(page.locator('text=Request confirmed!')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText(/Request confirmed/i)).toBeVisible({ timeout: 10000 });
 
     // --- Step 2 (The Inefficient Past) ---
+    // First we must logout of farmer app
+    await page.click('button:has-text("Logout")');
+    
+    // Now from landing, select Admin App and login
     await page.click('button:has-text("Admin Dashboard View")');
+    await page.fill('input[placeholder="admin"]', 'admin');
+    await page.fill('input[placeholder="••••••••"]', 'admin123');
+    await page.click('button:has-text("Secure Login")');
+
     await expect(page.locator('text=AgriConnect Admin')).toBeVisible();
 
     await page.locator('button:has-text("Requests")').click({ force: true });
-
-    // Assert request is pending
-    const requestRow = page.locator('tr').filter({ hasText: '9999999999' }).first();
-    await expect(requestRow).toBeVisible();
-    await expect(requestRow.locator('span:has-text("Pending")')).toBeVisible();
+    
+    // Check auto-allocated state
+    const demoRequestRow = page.locator('tr').filter({ hasText: '9999999999' }).first();
+    await expect(demoRequestRow).toBeVisible();
+    await expect(demoRequestRow.locator('span:has-text("Allocated")')).toBeVisible();
 
     // --- Step 3 (The Brain at Work) ---
-    // Intercept the API to GIS Engine payload / allocation status 
-    const approvePromise = page.waitForResponse(response =>
-      response.url().includes('status') && response.request().method() === 'PUT'
-    );
-
-    await requestRow.locator('button:has-text("Approve")').click();
-
-    const approveRes = await approvePromise;
-    expect(approveRes.status()).toBe(200); // Expecting node to proxy the GIS 200 return
-
-    await expect(requestRow.locator('span:has-text("Approved")')).toBeVisible({ timeout: 15000 });
-
-    // --- Step 4 (The Visualization) ---
-    // The tab is labeled "Dashboard"
+    // The API is now fully automated. We can check the dashboard map to verify hotspots or routed paths.
     await page.locator('text="Dashboard"').click({ force: true });
     await expect(page.locator('.leaflet-container')).toBeVisible();
 

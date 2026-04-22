@@ -4,6 +4,8 @@ const requestSchema = new mongoose.Schema({
   farmer_id: { type: String, required: true }, // e.g., Mock Mobile Number
   equipment_type: { type: String, required: true }, // e.g., "Rotavator"
   farm_size: { type: Number, required: true }, // Size in acres/hectares
+  capacity_required: { type: Number, default: 10 },
+  priority: { type: String, enum: ['high', 'medium', 'low'], default: 'medium' },
   crop: { type: String, required: true },
   location: {
     type: {

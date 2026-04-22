@@ -137,12 +137,15 @@ export default function Login() {
         )}
 
         <div className="mt-8 text-center text-sm">
-          <p className="text-gray-500 border-t pt-4">
+          <p className="text-gray-500 border-t pt-4 mb-4">
             Don't have an account?{' '}
             <Link to="/register" className="font-semibold text-green-600 hover:text-green-800 transition-colors">
               Register now
             </Link>
           </p>
+          <Link to="/" className="font-semibold text-gray-600 hover:text-gray-800 transition-colors">
+            ← Back to Portal Selection
+          </Link>
         </div>
       </div>
     </motion.div>
