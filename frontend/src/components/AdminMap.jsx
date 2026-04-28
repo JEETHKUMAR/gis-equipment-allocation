@@ -33,8 +33,9 @@ const greenIcon = new L.Icon({
 export default function AdminMap() {
   const [activeRequests, setActiveRequests] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([]);
+  const [routesGeometry, setRoutesGeometry] = useState({});
 
-  const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+  const apiUrl = import.meta.env.VITE_API_BASE_URL || `http://${window.location.hostname}:5000`;
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -62,6 +63,52 @@ export default function AdminMap() {
     const interval = setInterval(fetchRequests, 5000);
     return () => clearInterval(interval);
   }, [apiUrl]);
+
+  useEffect(() => {
+    const fetchRoutes = async () => {
+      let updated = false;
+      const newRoutes = { ...routesGeometry };
+      
+      for (const req of activeRequests) {
+        if (!newRoutes[req._id]) {
+          const farmLocation = req.location.coordinates; // [lon, lat]
+          const equipLocation = req.allocated_equipment.location.coordinates; // [lon, lat]
+          
+          try {
+            const url = `http://router.project-osrm.org/route/v1/driving/${equipLocation[0]},${equipLocation[1]};${farmLocation[0]},${farmLocation[1]}?overview=full&geometries=geojson`;
+            const res = await fetch(url);
+            const data = await res.json();
+            
+            if (data.routes && data.routes.length > 0) {
+              // Convert GeoJSON [lon, lat] to Leaflet [lat, lon]
+              const coords = data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+              newRoutes[req._id] = coords;
+            } else {
+              newRoutes[req._id] = [
+                [equipLocation[1], equipLocation[0]],
+                [farmLocation[1], farmLocation[0]]
+              ];
+            }
+          } catch (err) {
+            console.error('OSRM fetch error:', err);
+            newRoutes[req._id] = [
+              [equipLocation[1], equipLocation[0]],
+              [farmLocation[1], farmLocation[0]]
+            ];
+          }
+          updated = true;
+        }
+      }
+      
+      if (updated) {
+        setRoutesGeometry(newRoutes);
+      }
+    };
+
+    if (activeRequests.length > 0) {
+      fetchRoutes();
+    }
+  }, [activeRequests, routesGeometry]);
 
   return (
     <div className="flex-1 bg-white p-4 rounded-3xl shadow-lg border border-gray-200 flex flex-col relative min-h-[600px] z-0">
@@ -106,6 +153,7 @@ export default function AdminMap() {
               req.allocated_equipment.location.coordinates[1], 
               req.allocated_equipment.location.coordinates[0]
             ];
+            const routePositions = routesGeometry[req._id] || [equipmentLocation, farmLocation];
             
             return (
               <React.Fragment key={req._id}>
@@ -125,7 +173,7 @@ export default function AdminMap() {
                 </Marker>
 
                 <Polyline 
-                  positions={[equipmentLocation, farmLocation]} 
+                  positions={routePositions} 
                   pathOptions={{ color: 'blue', dashArray: '5, 10', weight: 4 }} 
                 />
               </React.Fragment>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import FleetManager from './FleetManager';
 import RequestManager from './RequestManager';
 import AdminMap from './AdminMap';
+import { useNavigate } from 'react-router-dom';
 
 // Custom icons using generic marker URLs to avoid local asset issues
 const redIcon = new L.Icon({
@@ -23,6 +24,7 @@ const greenIcon = new L.Icon({
 });
 
 export default function AdminDashboard() {
+  const navigate = useNavigate();
   const [activeRoutes, setActiveRoutes] = useState([]);
   const [activeTab, setActiveTab] = useState('dashboard');
   const [kpis, setKpis] = useState({ requests: 0, tractors: 0, dispatch: 0 });
@@ -30,7 +32,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+        const apiUrl = import.meta.env.VITE_API_BASE_URL || `http://${window.location.hostname}:5000`;
         const resRoutes = await fetch(`${apiUrl}/api/dashboard/active-routes`);
         if (resRoutes.ok) {
           const dataRoutes = await resRoutes.json();
@@ -90,15 +92,23 @@ export default function AdminDashboard() {
                 Requests
               </button>
               <button 
-                disabled
-                title="Coming Soon"
-                className="px-1 pt-1 text-sm font-medium transition-colors border-b-2 border-transparent text-gray-500 opacity-50 cursor-not-allowed"
+                onClick={() => setActiveTab('settings')} 
+                className={`px-1 pt-1 text-sm font-medium transition-colors border-b-2 ${activeTab === 'settings' ? 'border-green-500 text-white' : 'border-transparent text-gray-300 hover:text-white hover:border-gray-300'}`}
               >
                 Settings
               </button>
             </nav>
             <div className="flex items-center gap-4">
-              <div className="w-8 h-8 rounded-full bg-slate-700 border-2 border-slate-600"></div>
+              <button 
+                onClick={() => {
+                  localStorage.clear();
+                  navigate('/');
+                }}
+                className="text-sm font-bold bg-slate-800 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg border border-slate-700 hover:border-red-500 transition-colors"
+              >
+                Logout
+              </button>
+              <div className="w-8 h-8 rounded-full bg-slate-700 border-2 border-slate-600 flex items-center justify-center font-bold text-xs text-white">AD</div>
             </div>
           </div>
         </div>
@@ -148,9 +158,40 @@ export default function AdminDashboard() {
 
         {activeTab === 'fleets' && <FleetManager />}
         {activeTab === 'requests' && <RequestManager />}
+        {activeTab === 'settings' && (
+          <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col gap-6">
+            <h2 className="text-2xl font-bold text-gray-800 border-b pb-4">System Preferences</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="flex flex-col gap-3">
+                <h3 className="font-semibold text-lg text-gray-700">UI & Animations</h3>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input type="checkbox" className="w-5 h-5 text-green-600 rounded focus:ring-green-500" defaultChecked />
+                  <span className="text-gray-600">Enable Map Route Pulsing</span>
+                </label>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input type="checkbox" className="w-5 h-5 text-green-600 rounded focus:ring-green-500" defaultChecked />
+                  <span className="text-gray-600">Dynamic Card Hover Effects</span>
+                </label>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                <h3 className="font-semibold text-lg text-gray-700">Data Management</h3>
+                <p className="text-sm text-gray-500">Clear cached logistics data. Note: this will not delete database records, only local UI state.</p>
+                <button 
+                  onClick={() => {
+                    localStorage.removeItem('activeRoutes');
+                    alert('Local cache cleared successfully.');
+                  }}
+                  className="w-fit bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-4 py-2 rounded-lg transition-colors border border-slate-200"
+                >
+                  Clear Local Cache
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         
-
-
       </main>
     </div>
   );

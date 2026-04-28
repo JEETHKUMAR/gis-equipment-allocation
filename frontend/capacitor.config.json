@@ -1,0 +1,8 @@
+{
+  "appId": "com.agriconnect.app",
+  "appName": "AgriConnect",
+  "webDir": "dist",
+  "server": {
+    "cleartext": true
+  }
+}

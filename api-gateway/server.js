@@ -7,6 +7,8 @@ const axios = require('axios');
 
 const Request = require('./models/Request');
 const Equipment = require('./models/Equipment');
+const User = require('./models/User');
+const bcrypt = require('bcryptjs');
 
 const app = express();
 app.use(express.json());
@@ -65,6 +67,49 @@ app.post('/api/auth/verify-otp', (req, res) => {
   const token = jwt.sign({ farmer_id: mobile, role: 'farmer' }, jwtSecret, { expiresIn: '24h' });
 
   return res.json({ token, message: 'Login successful', farmer_id: mobile });
+});
+
+// 1c. Register
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    const { fullName, phone, password, role } = req.body;
+    
+    const existingUser = await User.findOne({ phone });
+    if (existingUser) {
+      return res.status(400).json({ error: 'Phone number already registered' });
+    }
+
+    const newUser = new User({ fullName, phone, password, role });
+    await newUser.save();
+    
+    res.status(201).json({ message: 'Registration successful' });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// 1d. Password Login
+app.post('/api/auth/login-password', async (req, res) => {
+  try {
+    const { mobile, password } = req.body;
+    
+    const user = await User.findOne({ phone: mobile });
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid phone number or password' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ error: 'Invalid phone number or password' });
+    }
+
+    const jwtSecret = process.env.JWT_SECRET || 'fallback-super-secret-key';
+    const token = jwt.sign({ farmer_id: mobile, role: user.role }, jwtSecret, { expiresIn: '24h' });
+
+    res.json({ token, message: 'Login successful', farmer_id: mobile });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // 1c. Admin Login
@@ -132,7 +177,8 @@ app.post('/api/requests', async (req, res) => {
         request_location: lonLat, // [Lng, Lat]
         request_priority: priority,
         equipment_list: equipmentList,
-        max_radius_km: 50.0 
+        initial_radius_km: 5.0,
+        fallback_radius_km: 50.0 
       };
 
       try {

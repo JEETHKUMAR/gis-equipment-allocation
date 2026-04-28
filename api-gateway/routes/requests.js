@@ -58,7 +58,8 @@ router.put('/:id/status', async (req, res) => {
       const payload = {
         request_location: requestDoc.location.coordinates, // [Lng, Lat]
         equipment_list: equipmentList,
-        max_radius_km: 50.0 
+        initial_radius_km: 5.0,
+        fallback_radius_km: 50.0 
       };
 
       // Step E: Make a POST request via Axios

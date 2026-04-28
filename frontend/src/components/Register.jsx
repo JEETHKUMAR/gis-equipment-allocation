@@ -39,9 +39,18 @@ export default function Register() {
     setLoading(true);
 
     try {
-      // Simulating a backend API call since /api/auth/register may not exist yet
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL || `http://${window.location.hostname}:5000`}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
       
+      const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.error || 'Registration failed');
+      }
+
       toast.success("Registration successful! Please login.");
       // Redirect to login
       navigate('/login');
